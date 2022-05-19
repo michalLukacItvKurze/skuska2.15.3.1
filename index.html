@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        
+        body {
+            margin: 0 auto;
+            background-color: black;
+            color: white;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            letter-spacing: 2px;
+            width: 300px;
+
+        }
+        .analyzator {
+            padding-top: 15px;
+            width: 350px;
+            background-color: rgb(49, 49, 49);
+            text-align: center;
+            align-items: center;
+            border-radius: 10px;
+            
+        }
+        h2 {
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+            padding-left: 45px;
+        }
+        
+
+        #celyText{
+            width: 300px;
+            height: 100px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 10px 0;
+            letter-spacing: 2px;
+            overflow: hidden;
+                       
+        }
+        #hladanyText{
+            width: 300px;
+            height: 50px;
+            text-align: center; 
+            border-radius: 5px;
+            margin: 10px 0 20px;
+            letter-spacing: 2px;
+        }
+        #buttonPanel{
+            width: 300px;
+            display: inline-flex;                       
+        }
+
+        button {
+            width: 50%;
+            height: 60px;
+            background-color: rgb(102, 102, 102);
+            border-radius: 5px;
+            color: rgb(255, 255, 255);
+            letter-spacing: 2px; 
+            border: 1px solid rgb(185, 185, 185);         
+        }
+        #btn3 {
+            width: 86%;
+            margin-top: 20px;
+        }
+        #btn3:hover {
+            background-color: rgb(255, 72, 0);
+        }
+       
+        #btn1:hover {
+            background-color: rgb(248, 19, 142);
+            letter-spacing: 2px;
+        }
+        #btn2:hover {
+            background-color: rgb(62, 182, 15);
+            letter-spacing: 2px;
+        }
+        #s1{
+            color: rgb(248, 19, 142);
+        }
+        #s2{
+            color: rgb(62, 182, 15);
+        }
+        #s3{
+            color: rgb(255, 72, 0);
+        }
+        #vysledok {
+            width: 300px;
+            height: 40px;
+            text-align: center; 
+            border-radius: 5px;
+            margin: 10px 0;
+            letter-spacing: 2px;
+        }
+        #vysledokArea {
+            height: 150px; 
+            border-radius: 5px;
+            margin: 20px 0;
+            letter-spacing: 2px;
+            background-color: white;
+            color: rgb(119, 119, 124);
+            border-radius: 5px;
+            padding-top: 10px;
+            
+        }
+        input{
+            width: 300px;
+            border: none;
+        }
+        #btn1,#btn2,#btn3 {
+            text-transform: uppercase;
+        }
+
+        @media only screen and (max-width: 600px) {
+            .analyzator {
+                width: 100%;
+                margin: 0 auto;
+            }
+            #hladanyText, #celyText {
+                width: 80%;
+            }
+            #btn1,#btn2 {
+                width: 40%;
+            }
+            #buttonPanel {
+                margin-left: 10%;
+            }
+            h2 {
+                padding: 0;
+            }
+            
+        }
+        
+       
+    </style>
+    <title>15.3.1 - zadanie na vypracovanie </title>
+</head>
+<body>
+    <h2>te<span id="s1">x</span>tový anal<span id="s2">y</span><span id="s3">z</span>átor</h2>
+    <div class="analyzator">
+        
+        <input type="text" id="celyText" placeholder="Zadaj cely text"><br>
+        
+        <input type="text" id="hladanyText" placeholder="Hladane slovo"><br>
+   
+        <div id="buttonPanel">
+            <button onclick="btnKontrola(event)" id="btn1">nachádza sa</button><br>
+            <button onclick="btnAnalyzuj()" id="btn2">Analizuj</button><br>
+        </div>
+        <button onclick="zasifruj()" id="btn3">Zašifrovanie textu</button>
+        <div class="vysledokArea" id="vysledokArea"></div>
+    </div>
+    
+   
+    <script>
+
+        let vysledokArea = document.getElementById('vysledokArea');
+        
+        function btnKontrola(event){
+            event.preventDefault
+
+            let celyText = document.getElementById('celyText').value;
+            let hladanyText = document.getElementById('hladanyText').value;
+            let result = celyText.includes(hladanyText);
+            
+            vysledokArea.innerHTML =""; 
+
+            if(result){
+                vysledokArea.innerHTML += '<p>' + "<b> sa nachadza  v texte </b> <br><br>" + hladanyText +'</p>';
+            }
+            else {
+                vysledokArea.innerHTML += '<p>' + "<b> sa nenachadza  v texte </b> <br><br>" + hladanyText +'</p>';
+            }
+        }
+
+        function btnAnalyzuj(){
+            
+            /* premenne + vypocet dlzky + odstranenie medzier */
+            let dlzkaCelehoTextu = celyText.value.length;
+            let dlzkaCelehoTextuBezMedzery = celyText.value.split(" ");
+            let najdlhsieSlovo = longest(celyText.value);
+            let pocetNajdlhsieSlovo = najdlhsieSlovo.length;
+            let pocetCisel = getCountOfDigits(celyText.value);
+            
+            /*vypocet dlzky celeho textu bez medzery*/
+            dlzkaCelehoTextuBezMedzery = dlzkaCelehoTextuBezMedzery.join('').length;
+                       
+            /* vymazanie ineru v html */ 
+            vysledokArea.innerHTML =""; 
+
+            /* inner zapisuje vysledky do html */
+            vysledokArea.innerHTML += 
+            '<p>'   + '<b>dlzka celeho textu : </b>' + dlzkaCelehoTextu 
+                    + '<b><br>dlzka textu bez medzer : </b>' + dlzkaCelehoTextuBezMedzery 
+                    + '<b><br>cislice v texte : </b>' + pocetCisel 
+                    + '<b><br>najdlhsie slovo : </b>' + najdlhsieSlovo 
+                    + '<b><br>pocet pismen najdlhsie slovo : </b>' + pocetNajdlhsieSlovo 
+                    +'</p>';
+        }
+
+        /* funkcia najdlhsie slovo */
+        function longest(str){
+            // Splitnem string na array
+            str = str.split(" ")
+            // vratim prvu usporiadanu najvacsiu hodnotu 
+            return str.sort((a, b) => b.length - a.length)[0]
+        }
+        /* funckia pocet cisel */
+        function getCountOfDigits(str) {
+            return str.replace(/[^0-9]/g, '').length;
+        }
+
+        /* funkcia na zasifrovanie */ 
+        function zasifruj(){
+            let celyText = document.getElementById('celyText').value.toLowerCase();
+            let celyTextAr = celyText.split("");
+
+            const o = celyTextAr.indexOf('o');
+            const i = celyTextAr.indexOf('i');
+            const e = celyTextAr.indexOf('e');
+            const a = celyTextAr.indexOf('a');
+            const s = celyTextAr.indexOf('s');
+            const b = celyTextAr.indexOf('b');
+
+            if (o !==-1){
+                celyTextAr[o] = '0';
+            }
+            if (i !==-1){
+                celyTextAr[i] = '1';
+            }
+            if (e !==-1){
+                celyTextAr[e] = '3';
+            }
+            if (a !==-1){
+                celyTextAr[a] = '4';
+            }
+            if (s !==-1){
+                celyTextAr[s] = '5';
+            }
+            if (b !==-1){
+                celyTextAr[b] = '8';
+            }
+            
+            let zasifrovanyText = celyTextAr.join('');
+            
+            /* vymazanie ineru v html */ 
+            vysledokArea.innerHTML =""; 
+
+            /* inner zapisuje vysledky do html */
+            vysledokArea.innerHTML += '<p>'+'<b>vysledok sifrovania: </b><br><br>' + zasifrovanyText  +'</p>';
+
+        }
+
+  
+      
+    </script>
+</body>
+</html>
